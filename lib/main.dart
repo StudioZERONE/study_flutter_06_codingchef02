@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:logindice/dice.dart';
 
 void main() => runApp(MyApp());
 
@@ -19,6 +20,9 @@ class LogIn extends StatefulWidget {
 }
 
 class _LogInState extends State<LogIn> {
+  TextEditingController ctrlId = TextEditingController();
+  TextEditingController ctrlPw = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,69 +35,124 @@ class _LogInState extends State<LogIn> {
           IconButton(icon: Icon(Icons.search), onPressed: () {})
         ],
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Padding(
-              padding: EdgeInsets.only(top: 50),
-            ),
-            Center(
-              child: Image(
-                image: AssetImage('image/chef.gif'),
-                width: 170,
-                height: 190,
+      body: Builder(builder: (context) {
+        return SingleChildScrollView(
+          child: Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.only(top: 50),
               ),
-            ),
-            Form(
-              child: Theme(
-                data: ThemeData(
-                  primaryColor: Colors.teal,
-                  inputDecorationTheme: InputDecorationTheme(
-                    labelStyle: TextStyle(
-                      color: Colors.teal,
-                      fontSize: 15,
+              Center(
+                child: Image(
+                  image: AssetImage('image/chef.gif'),
+                  width: 170,
+                  height: 190,
+                ),
+              ),
+              Form(
+                child: Theme(
+                  data: ThemeData(
+                    primaryColor: Colors.teal,
+                    inputDecorationTheme: InputDecorationTheme(
+                      labelStyle: TextStyle(
+                        color: Colors.teal,
+                        fontSize: 15,
+                      ),
                     ),
                   ),
-                ),
-                child: Container(
-                  padding: EdgeInsets.all(40),
-                  child: Column(
-                    children: [
-                      TextField(
-                        decoration: InputDecoration(
-                          labelText: 'Enter "dice"',
+                  child: Container(
+                    padding: EdgeInsets.all(40),
+                    child: Column(
+                      children: [
+                        TextField(
+                          controller: ctrlId,
+                          decoration: InputDecoration(
+                            labelText: 'Enter "dice"',
+                          ),
+                          keyboardType: TextInputType.emailAddress,
                         ),
-                        keyboardType: TextInputType.emailAddress,
-                      ),
-                      TextField(
-                        decoration: InputDecoration(
-                          labelText: 'Enter Password',
+                        TextField(
+                          controller: ctrlPw,
+                          decoration: InputDecoration(
+                            labelText: 'Enter Password',
+                          ),
+                          keyboardType: TextInputType.text,
+                          obscureText: true,
                         ),
-                        keyboardType: TextInputType.text,
-                        obscureText: true,
-                      ),
-                      SizedBox(
-                        height: 40,
-                      ),
-                      ButtonTheme(
+                        SizedBox(
+                          height: 40,
+                        ),
+                        ButtonTheme(
                           minWidth: 100,
                           height: 50,
                           child: ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              if (ctrlId.text == 'dice' &&
+                                  ctrlPw.text == '1234') {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            Dice()));
+                              } else if (ctrlId.text == 'dice' &&
+                                  ctrlPw.text != '1234') {
+                                showSnackBar2(context);
+                              } else if (ctrlId.text != 'dice' &&
+                                  ctrlPw.text == '1234') {
+                                showSnackBar3(context);
+                              } else {
+                                showSnackBar(context);
+                              }
+                            },
                             child: Icon(
                               Icons.arrow_forward,
                               color: Colors.white,
                               size: 35,
                             ),
-                          )),
-                    ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
-        ),
-      ),
+            ],
+          ),
+        );
+      }),
     );
   }
+}
+
+void showSnackBar(BuildContext context) {
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    content: Text(
+      '로그인 정보를 다시 확인하세요',
+      textAlign: TextAlign.center,
+    ),
+    duration: Duration(seconds: 2),
+    backgroundColor: Colors.blue,
+  ));
+}
+
+void showSnackBar2(BuildContext context) {
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    content: Text(
+      '비밀번호가 일치하지 않습니다.',
+      textAlign: TextAlign.center,
+    ),
+    duration: Duration(seconds: 2),
+    backgroundColor: Colors.blue,
+  ));
+}
+
+void showSnackBar3(BuildContext context) {
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    content: Text(
+      'dice의 철자를 확인하세요',
+      textAlign: TextAlign.center,
+    ),
+    duration: Duration(seconds: 2),
+    backgroundColor: Colors.blue,
+  ));
 }
