@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 
-class Dice extends StatelessWidget {
+class Dice extends StatefulWidget {
   const Dice({Key key}) : super(key: key);
 
+  @override
+  State<Dice> createState() => _DiceState();
+}
+
+class _DiceState extends State<Dice> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -12,10 +17,40 @@ class Dice extends StatelessWidget {
         centerTitle: true,
       ),
       body: Center(
-        child: Image(
-          image: AssetImage('image/chef.gif'),
-          width: 170,
-          height: 190,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(32.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Image.asset('image/dice1.png'),
+                  ),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  Expanded(
+                    child: Image.asset('image/dice2.png'),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 60,
+            ),
+            ButtonTheme(
+                minWidth: 100,
+                height: 60,
+                child: ElevatedButton(
+                  onPressed: () {},
+                  child: Icon(
+                    Icons.play_arrow,
+                    color: Colors.white,
+                    size: 50,
+                  ),
+                ))
+          ],
         ),
       ),
     );
